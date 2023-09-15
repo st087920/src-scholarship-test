@@ -8,6 +8,9 @@ class Element:
         self.index = index
         self.value = value
 
+def dot_product(v1, i, v):
+    answer = 0.0
+
 
 class SparseMatrix:
     def __init__(self, *, file=None, dense: np.array = None):
@@ -56,17 +59,50 @@ class SparseMatrix:
                 A[i, element.index] = element.value
         return A
 
+    def num_of_columns(self):
+        return max(range(0, len(self.data_)), key=lambda x: self.data_[x][-1].index)
+
+    def find(self, i, j):
+        for elem in self.data_[j]:
+            if elem.index == i:
+                return elem.value
+            elif elem.index > i:
+                return 0.0
+        return 0.0
+
+    def get_row(self, i):
+        assert i < len(self.data_)
+        answer = SparseMatrix()
+        answer.data_ = [[]]
+        for j in range(len(self.data_)):
+            elem = self.find(i, j)
+            if abs(elem) > 1e-5:
+                answer[0].append(Element(index=int(j), value=float(elem)))
+        return answer
+
     def __matmul__(self, other):
-
         # vvvvv your code here vvvvv
-        result = SparseMatrix(dense=self.to_dense() @ other.to_dense())
+        # тут надо доделать разреженное скалярное произведение
+        result = SparseMatrix()
+        result.data_ = [[]]
+        for i in range(len(other.data_)):
+            result.data_.append([])
+            for j in range(self.num_of_columns()):
+                elem = dot_product()
+                if abs(elem) > 1e-5:
+                    result[i].append(elem)
+        #result = SparseMatrix(dense=self.to_dense() @ other.to_dense())
         # ^^^^^ your code here ^^^^^
-
         return result
 
     def __pow__(self, power, modulo=None):
 
         # vvvvv your code here vvvvv
+        # тут нужно делать быстрое возведение в степень:
+        # сохраняем power
+        # уменьшаем power: если чётная, то результат на себя умножаем, power делим пополам
+        # еси нечет, то уменьшаем power на 1: умножаем на self
+        #
         result = SparseMatrix(dense=np.linalg.matrix_power(self.to_dense(), power))
         # ^^^^^ your code here ^^^^^
 
