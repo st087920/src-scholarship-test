@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 
 namespace fs = std::filesystem;
 
@@ -17,7 +18,7 @@ class SparseMatrix {
     explicit SparseMatrix() {}
     SparseMatrix(fs::path fname);
 
-    void Print();
+    void Print() const;
 
     SparseMatrix operator*(const SparseMatrix &m);
     SparseMatrix operator^(uint32_t p);
